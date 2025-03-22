@@ -1,4 +1,4 @@
-package pl.pwr.AdvancedSearchLanguage;
+package pl.pwr.ads;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

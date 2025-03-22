@@ -1,4 +1,4 @@
-package pl.pwr.AdvancedSearchLanguage;
+package pl.pwr.ads;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
