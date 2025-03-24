@@ -15,19 +15,6 @@ public class AdvancedSearchLanguageApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AdvancedSearchLanguageApplication.class, args);
-		searchService.getArticles(
-				"""
-						findtitle:kostek 
-						findtitle:grzyb 
-						from:elonMusk 
-						from:Gilbert
-						lang: en AND de 
-						lang: es
-						since:2000-01-01
-						until:2001-01-01
-						limit: 10
-						"""
-		);
 	}
 
 }
