@@ -17,7 +17,7 @@ public class AdvancedSearchLanguageImpl extends AdvancedSearchLanguageBaseListen
     private String limitClause = "";
     private StringBuilder sqlBuilder;
     private static final String SQL_STATEMENT = """
-            SELECT title, description, language, created_at, updated_at,
+            SELECT post.id, title, description, language, created_at, updated_at,
             a.name || ' ' || a.surname as name_surname, photo 
             FROM post 
             INNER JOIN author a on post.id = a.post_id
@@ -55,7 +55,7 @@ public class AdvancedSearchLanguageImpl extends AdvancedSearchLanguageBaseListen
 
     @Override
     public void exitFromExpression(AdvancedSearchLanguageParser.FromExpressionContext ctx) {
-        processWord("name_surname", ctx.children, false);
+        processWord("a.name || ' ' || a.surname ", ctx.children, false);
     }
 
     @Override

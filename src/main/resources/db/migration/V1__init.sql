@@ -16,8 +16,9 @@ CREATE TABLE author (
 
 CREATE TABLE photo (
     id SERIAL PRIMARY KEY,
-    post_id INTEGER NOT NULL,
-    photo BYTEA
+    photo BYTEA NOT NULL,
+    post_id BIGINT NOT NULL,
+    CONSTRAINT fk_post FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE
 );
 
 CREATE TABLE post_author(
@@ -28,11 +29,4 @@ CREATE TABLE post_author(
     CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES author(id) ON DELETE CASCADE
 );
 
-CREATE TABLE post_photo(
-    post_id BIGINT,
-    photo_id BIGINT,
-    PRIMARY KEY (post_id, photo_id),
-    CONSTRAINT fk_post FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
-    CONSTRAINT fk_photo FOREIGN KEY (photo_id) REFERENCES photo(id) ON DELETE CASCADE
-);
 

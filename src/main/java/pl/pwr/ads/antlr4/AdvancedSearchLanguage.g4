@@ -45,7 +45,7 @@ DATE: DIGIT DIGIT DIGIT DIGIT ('/'|'-') DIGIT DIGIT ('/'|'-') DIGIT DIGIT;
 LANGUAGE: LETTER LETTER;
 NUMBER: DIGIT+;
 FILTER: 'photo' | 'video';
-WORD: [a-zA-Z]+;
+WORD: [a-zA-Z ]+;
 QUOTED_WORD: '"' ~["<>\r\n]* '"';
 
 WS: [ \t\r\n]+ -> skip;
