@@ -1,6 +1,8 @@
 package pl.pwr.ads.service;
-
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.pwr.ads.antlr4.AdvancedSearchLanguageBaseListener;
@@ -15,32 +17,22 @@ public class AdvancedSearchLanguageImpl extends AdvancedSearchLanguageBaseListen
 
     private final Map<String, String> expressionValues = new HashMap<>();
     private String limitClause = "";
-    private StringBuilder sqlBuilder;
-    private static final String SQL_STATEMENT = """
-            SELECT post.id, title, description, language, created_at, updated_at,
-            a.name || ' ' || a.surname as name_surname, photo 
-            FROM post 
-            INNER JOIN author a on post.id = a.post_id
-            LEFT JOIN photo p on post.id = p.post_id
-            """;
+
+    private STGroup group = new STGroupFile("src/main/java/pl/pwr/ads/antlr4/SQLTemplates.stg");
 
     public String generateSql() {
-        return sqlBuilder != null ? sqlBuilder.toString() : "";
+        List<String> conditions = new ArrayList<>(expressionValues.values());
+        ST st = group.getInstanceOf("sqlTemplate");
+        st.add("conditions", conditions);
+        st.add("limitClause", limitClause);
+        String sql = st.render();
+        LOGGER.info("Generated SQL: {}", sql);
+        return sql;
     }
 
     @Override
     public void exitQuery(AdvancedSearchLanguageParser.QueryContext ctx) {
-        sqlBuilder = new StringBuilder(SQL_STATEMENT);
-
-        if (!expressionValues.isEmpty()) {
-            sqlBuilder.append("WHERE ")
-                    .append(expressionValues.values().stream()
-                            .collect(Collectors.joining(" AND ")));
-        }
-
-        sqlBuilder.append(" ").append(limitClause);
-
-        LOGGER.info("Generated SQL: {}", sqlBuilder);
+        generateSql();
     }
 
     @Override
@@ -55,7 +47,7 @@ public class AdvancedSearchLanguageImpl extends AdvancedSearchLanguageBaseListen
 
     @Override
     public void exitFromExpression(AdvancedSearchLanguageParser.FromExpressionContext ctx) {
-        processWord("a.name || ' ' || a.surname ", ctx.children, false);
+        processWord("a.name || ' ' || a.surname", ctx.children, false);
     }
 
     @Override
@@ -81,57 +73,55 @@ public class AdvancedSearchLanguageImpl extends AdvancedSearchLanguageBaseListen
 
     private void processWord(String key, List<ParseTree> words, boolean isLike) {
         String operator = isLike ? "LIKE" : "=";
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder conditionBuilder = new StringBuilder();
 
-        if(expressionValues.containsKey(key)){
-            stringBuilder.append(expressionValues.get(key))
-                    .setLength(expressionValues.get(key).length()-1);
-
-            stringBuilder.append("OR ");
-        }else {
-            stringBuilder.append("( ");
+        if (expressionValues.containsKey(key)) {
+            String prev = expressionValues.get(key);
+            conditionBuilder.append(prev, 0, prev.length() - 1);
+            conditionBuilder.append(" OR ");
+        } else {
+            conditionBuilder.append("( ");
         }
 
         for (int i = 2; i < words.size(); i += 2) {
             String value = words.get(i).getText().replace("\"", "");
-            stringBuilder.append(key)
+            conditionBuilder.append(key)
                     .append(" ")
                     .append(operator)
                     .append(operator.equals("LIKE") ? " '%" : " '")
                     .append(value)
                     .append(operator.equals("LIKE") ? "%'" : "'");
-
             if (i < words.size() - 1) {
-                stringBuilder.append("AND".equalsIgnoreCase(words.get(i + 1).getText()) ? " AND " : " OR ");
+                String logicOp = words.get(i + 1).getText();
+                conditionBuilder.append(" ").append("AND".equalsIgnoreCase(logicOp) ? "AND" : "OR").append(" ");
             } else {
-                stringBuilder.append(" )");
+                conditionBuilder.append(" )");
             }
         }
 
-        expressionValues.put(key, stringBuilder.toString());
-        LOGGER.debug("Processed word condition for {}: {}", key, stringBuilder);
+        expressionValues.put(key, conditionBuilder.toString());
+        LOGGER.debug("Processed word condition for {}: {}", key, conditionBuilder);
     }
 
     private void processDate(String sign, String date) {
         String key = "created_at";
-        StringBuilder stringBuilder = new StringBuilder();
-        if(expressionValues.containsKey(key)){
-            stringBuilder.append(expressionValues.get(key))
-                    .setLength(expressionValues.get(key).length()-1);
-
-            stringBuilder.append("AND ");
-        }else {
-            stringBuilder.append("( ");
+        StringBuilder conditionBuilder = new StringBuilder();
+        if (expressionValues.containsKey(key)) {
+            String prev = expressionValues.get(key);
+            conditionBuilder.append(prev, 0, prev.length() - 1);
+            conditionBuilder.append(" AND ");
+        } else {
+            conditionBuilder.append("( ");
         }
 
-        stringBuilder.append(key)
+        conditionBuilder.append(key)
                 .append(" ")
                 .append(sign)
                 .append(" '")
                 .append(date)
                 .append("' )");
 
-        expressionValues.put(key, stringBuilder.toString());
-        LOGGER.debug("Processed date condition for {}: {}", key, stringBuilder);
+        expressionValues.put(key, conditionBuilder.toString());
+        LOGGER.debug("Processed date condition for {}: {}", key, conditionBuilder);
     }
 }

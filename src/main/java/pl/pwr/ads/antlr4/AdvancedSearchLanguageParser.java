@@ -502,6 +502,10 @@ public class AdvancedSearchLanguageParser extends Parser {
 		public TerminalNode WORD(int i) {
 			return getToken(AdvancedSearchLanguageParser.WORD, i);
 		}
+		public List<TerminalNode> QUOTED_WORD() { return getTokens(AdvancedSearchLanguageParser.QUOTED_WORD); }
+		public TerminalNode QUOTED_WORD(int i) {
+			return getToken(AdvancedSearchLanguageParser.QUOTED_WORD, i);
+		}
 		public List<TerminalNode> OR() { return getTokens(AdvancedSearchLanguageParser.OR); }
 		public TerminalNode OR(int i) {
 			return getToken(AdvancedSearchLanguageParser.OR, i);
@@ -541,7 +545,15 @@ public class AdvancedSearchLanguageParser extends Parser {
 			setState(58);
 			match(COLON);
 			setState(59);
-			match(WORD);
+			_la = _input.LA(1);
+			if ( !(_la==WORD || _la==QUOTED_WORD) ) {
+			_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			setState(64);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -559,7 +571,15 @@ public class AdvancedSearchLanguageParser extends Parser {
 					consume();
 				}
 				setState(61);
-				match(WORD);
+				_la = _input.LA(1);
+				if ( !(_la==WORD || _la==QUOTED_WORD) ) {
+				_errHandler.recoverInline(this);
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
 				}
 				}
 				setState(66);
@@ -937,8 +957,8 @@ public class AdvancedSearchLanguageParser extends Parser {
 		"35\u0007\u0000\u0000\u000042\u0001\u0000\u0000\u000058\u0001\u0000\u0000"+
 		"\u000064\u0001\u0000\u0000\u000067\u0001\u0000\u0000\u00007\u0007\u0001"+
 		"\u0000\u0000\u000086\u0001\u0000\u0000\u00009:\u0005\u0003\u0000\u0000"+
-		":;\u0005\t\u0000\u0000;@\u0005\u0010\u0000\u0000<=\u0007\u0001\u0000\u0000"+
-		"=?\u0005\u0010\u0000\u0000><\u0001\u0000\u0000\u0000?B\u0001\u0000\u0000"+
+		":;\u0005\t\u0000\u0000;@\u0007\u0000\u0000\u0000<=\u0007\u0001\u0000\u0000"+
+		"=?\u0007\u0000\u0000\u0000><\u0001\u0000\u0000\u0000?B\u0001\u0000\u0000"+
 		"\u0000@>\u0001\u0000\u0000\u0000@A\u0001\u0000\u0000\u0000A\t\u0001\u0000"+
 		"\u0000\u0000B@\u0001\u0000\u0000\u0000CD\u0005\u0004\u0000\u0000DE\u0005"+
 		"\t\u0000\u0000EJ\u0005\r\u0000\u0000FG\u0007\u0001\u0000\u0000GI\u0005"+

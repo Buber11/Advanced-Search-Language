@@ -18,7 +18,7 @@ expression
 
 findTitleExpression: FIND_TITLE_KEYWORD COLON (QUOTED_WORD | WORD) ( (OR | AND) (QUOTED_WORD | WORD) )*;
 findContentExpression: FIND_CONTENT_KEYWORD COLON (QUOTED_WORD | WORD) ( (OR | AND) (QUOTED_WORD | WORD) )*;
-fromExpression: FROM_KEYWORD COLON WORD ( (OR | AND) WORD )*;
+fromExpression: FROM_KEYWORD COLON ( WORD | QUOTED_WORD ) ( (OR | AND) ( WORD | QUOTED_WORD ) )*;
 langExpression: LANG_KEYWORD COLON LANGUAGE ( (AND|OR) LANGUAGE )*;
 sinceExpression: SINCE_KEYWORD COLON DATE;
 untilExpression: UNTIL_KEYWORD COLON DATE;
@@ -45,7 +45,7 @@ DATE: DIGIT DIGIT DIGIT DIGIT ('/'|'-') DIGIT DIGIT ('/'|'-') DIGIT DIGIT;
 LANGUAGE: LETTER LETTER;
 NUMBER: DIGIT+;
 FILTER: 'photo' | 'video';
-WORD: [a-zA-Z ]+;
+WORD: [a-zA-Z]+;
 QUOTED_WORD: '"' ~["<>\r\n]* '"';
 
 WS: [ \t\r\n]+ -> skip;

@@ -37,7 +37,6 @@ public class SearchServiceImpl implements SearchService {
 
         List<PostDTO> posts = entityManager.createNativeQuery(sql,"PostDTOMapping").getResultList();
 
-        posts.forEach(e -> System.out.println(e.getTitle()));
         return posts;
     }
 
