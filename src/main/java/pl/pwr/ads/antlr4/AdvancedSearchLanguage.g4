@@ -2,8 +2,7 @@ grammar AdvancedSearchLanguage;
 
 options { caseInsensitive = true; }
 
-
-query: expression+ EOF;
+query: expression* EOF;
 
 expression
     :  findTitleExpression
@@ -45,7 +44,7 @@ DATE: DIGIT DIGIT DIGIT DIGIT ('/'|'-') DIGIT DIGIT ('/'|'-') DIGIT DIGIT;
 LANGUAGE: LETTER LETTER;
 NUMBER: DIGIT+;
 FILTER: 'photo' | 'video';
-WORD: [a-zA-Z]+;
+WORD: LETTER+;
 QUOTED_WORD: '"' ~["<>\r\n]* '"';
 
 WS: [ \t\r\n]+ -> skip;
