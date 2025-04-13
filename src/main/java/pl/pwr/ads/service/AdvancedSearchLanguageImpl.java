@@ -57,12 +57,12 @@ public class AdvancedSearchLanguageImpl extends AdvancedSearchLanguageBaseListen
 
     @Override
     public void exitSinceExpression(AdvancedSearchLanguageParser.SinceExpressionContext ctx) {
-        processDate(">", ctx.DATE().getText());
+        processDate(">=", ctx.DATE().getText());
     }
 
     @Override
     public void exitUntilExpression(AdvancedSearchLanguageParser.UntilExpressionContext ctx) {
-        processDate("<", ctx.DATE().getText());
+        processDate("<=", ctx.DATE().getText());
     }
 
     @Override

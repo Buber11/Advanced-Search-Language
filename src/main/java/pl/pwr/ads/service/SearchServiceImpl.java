@@ -46,10 +46,12 @@ public class SearchServiceImpl implements SearchService {
         AdvancedSearchLanguageLexer lexer = new AdvancedSearchLanguageLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         AdvancedSearchLanguageParser parser = new AdvancedSearchLanguageParser(tokens);
-        ParseTree tree = parser.query();
         AdvancedSearchLanguageImpl advancedSearchLanguage = new AdvancedSearchLanguageImpl();
-        ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(advancedSearchLanguage, tree);
+        if(!input.isEmpty()) {
+            ParseTree tree = parser.query();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            walker.walk(advancedSearchLanguage, tree);
+        }
 
         return advancedSearchLanguage.generateSql();
     }

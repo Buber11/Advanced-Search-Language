@@ -1,9 +1,9 @@
 sqlTemplate(conditions, limitClause) ::= <<
-SELECT post.id, title, description, language, created_at, updated_at,
-       a.name || ' ' || a.surname as name_surname, photo
-FROM post
-INNER JOIN author a on post.id = a.post_id
-LEFT JOIN photo p on post.id = p.post_id
+SELECT p.id, title, description, language, created_at, updated_at,
+       a.name || ' ' || a.surname as name_surname
+FROM post p
+INNER JOIN post_author pa on p.id = pa.post_id
+INNER JOIN author a on pa.author_id = a.id
 <if(conditions)>WHERE <conditions; separator=" AND "><endif>
 <if(limitClause)><limitClause><endif>
 >>
