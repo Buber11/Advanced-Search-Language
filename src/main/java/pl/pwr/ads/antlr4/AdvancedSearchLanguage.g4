@@ -2,6 +2,7 @@ grammar AdvancedSearchLanguage;
 
 options { caseInsensitive = true; }
 
+
 query: expression* EOF;
 
 expression
@@ -12,7 +13,9 @@ expression
     |  untilExpression
     |  langExpression
     |  limitExpression
-    |  filterExpression
+    |  offsetExpression
+    |  orderByExpression
+    |  sortByExpression
     ;
 
 findTitleExpression: FIND_TITLE_KEYWORD COLON (QUOTED_WORD | WORD) ( (OR | AND) (QUOTED_WORD | WORD) )*;
@@ -22,7 +25,9 @@ langExpression: LANG_KEYWORD COLON LANGUAGE ( (AND|OR) LANGUAGE )*;
 sinceExpression: SINCE_KEYWORD COLON DATE;
 untilExpression: UNTIL_KEYWORD COLON DATE;
 limitExpression: LIMIT_KEYWORD COLON NUMBER;
-filterExpression: FILTER_KEYWORD COLON FILTER ( (OR | AND) FILTER )*;
+offsetExpression: OFFSET_KEYWORD COLON NUMBER;
+orderByExpression: ORDER_BY_KEYWORD COLON ORDER_BY_WORD;
+sortByExpression: SORT_KEYWORD COLON SORT_BY_WORD(','SORT_BY_WORD)*;
 
 //KEYWORD
 FIND_TITLE_KEYWORD: 'findtitle';
@@ -30,7 +35,9 @@ FIND_CONTENT_KEYWORD: 'findcontent';
 FROM_KEYWORD: 'from';
 LANG_KEYWORD: 'lang';
 LIMIT_KEYWORD: 'limit';
-FILTER_KEYWORD: 'filter';
+OFFSET_KEYWORD: 'offset';
+ORDER_BY_KEYWORD: 'orderby';
+SORT_KEYWORD: 'sortby';
 SINCE_KEYWORD: 'since';
 UNTIL_KEYWORD: 'until';
 COLON: ':';
@@ -43,7 +50,8 @@ fragment LETTER: [a-zA-Z];
 DATE: DIGIT DIGIT DIGIT DIGIT ('/'|'-') DIGIT DIGIT ('/'|'-') DIGIT DIGIT;
 LANGUAGE: LETTER LETTER;
 NUMBER: DIGIT+;
-FILTER: 'photo' | 'video';
+ORDER_BY_WORD: ('asc'|'desc');
+SORT_BY_WORD: ('author'|'date'|'title'|'lang');
 WORD: LETTER+;
 QUOTED_WORD: '"' ~["<>\r\n]* '"';
 

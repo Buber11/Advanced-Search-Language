@@ -98,13 +98,33 @@ public interface AdvancedSearchLanguageListener extends ParseTreeListener {
 	 */
 	void exitLimitExpression(AdvancedSearchLanguageParser.LimitExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AdvancedSearchLanguageParser#filterExpression}.
+	 * Enter a parse tree produced by {@link AdvancedSearchLanguageParser#offsetExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterFilterExpression(AdvancedSearchLanguageParser.FilterExpressionContext ctx);
+	void enterOffsetExpression(AdvancedSearchLanguageParser.OffsetExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AdvancedSearchLanguageParser#filterExpression}.
+	 * Exit a parse tree produced by {@link AdvancedSearchLanguageParser#offsetExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitFilterExpression(AdvancedSearchLanguageParser.FilterExpressionContext ctx);
+	void exitOffsetExpression(AdvancedSearchLanguageParser.OffsetExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AdvancedSearchLanguageParser#orderByExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterOrderByExpression(AdvancedSearchLanguageParser.OrderByExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AdvancedSearchLanguageParser#orderByExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitOrderByExpression(AdvancedSearchLanguageParser.OrderByExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AdvancedSearchLanguageParser#sortByExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterSortByExpression(AdvancedSearchLanguageParser.SortByExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AdvancedSearchLanguageParser#sortByExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitSortByExpression(AdvancedSearchLanguageParser.SortByExpressionContext ctx);
 }

@@ -125,13 +125,37 @@ public class AdvancedSearchLanguageBaseListener implements AdvancedSearchLanguag
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFilterExpression(AdvancedSearchLanguageParser.FilterExpressionContext ctx) { }
+	@Override public void enterOffsetExpression(AdvancedSearchLanguageParser.OffsetExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFilterExpression(AdvancedSearchLanguageParser.FilterExpressionContext ctx) { }
+	@Override public void exitOffsetExpression(AdvancedSearchLanguageParser.OffsetExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOrderByExpression(AdvancedSearchLanguageParser.OrderByExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOrderByExpression(AdvancedSearchLanguageParser.OrderByExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSortByExpression(AdvancedSearchLanguageParser.SortByExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSortByExpression(AdvancedSearchLanguageParser.SortByExpressionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

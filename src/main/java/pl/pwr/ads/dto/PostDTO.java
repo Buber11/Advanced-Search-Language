@@ -14,8 +14,9 @@ public class PostDTO {
     private LocalDateTime created_at;
 
     private LocalDateTime updated_at;
+    private Integer numberOfPages;
 
-    private String name_surname;
+    private String author;
 
     public PostDTO() {
     }
@@ -26,14 +27,14 @@ public class PostDTO {
                    String language,
                    LocalDateTime created_at,
                    LocalDateTime updated_at,
-                   String name_surname) {
+                   String author) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.language = language;
         this.created_at = created_at;
         this.updated_at = updated_at;
-        this.name_surname = name_surname;
+        this.author = author;
     }
 
     public long getId() {
@@ -84,11 +85,19 @@ public class PostDTO {
         this.updated_at = updated_at;
     }
 
-    public String getName_surname() {
-        return name_surname;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setName_surname(String name_surname) {
-        this.name_surname = name_surname;
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Integer getNumberOfPages() {
+        return numberOfPages;
+    }
+
+    public void setNumberOfPages(Integer numberOfPages) {
+        this.numberOfPages = numberOfPages;
     }
 }

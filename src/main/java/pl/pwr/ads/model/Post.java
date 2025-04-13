@@ -29,7 +29,7 @@ import java.util.Set;
                         @ColumnResult(name = "updated_at", type = LocalDateTime.class),
                         @ColumnResult(name = "language", type = String.class),
                         @ColumnResult(name = "created_at", type = LocalDateTime.class),
-                        @ColumnResult(name = "name_surname", type = String.class)
+                        @ColumnResult(name = "author", type = String.class)
                 }
         )
 )
@@ -48,6 +48,7 @@ public class Post {
     private LocalDateTime created_at;
 
     private LocalDateTime updated_at;
+
 
     @ManyToMany(
             cascade = {CascadeType.PERSIST, CascadeType.MERGE},

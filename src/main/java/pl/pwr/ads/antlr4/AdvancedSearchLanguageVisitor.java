@@ -65,9 +65,21 @@ public interface AdvancedSearchLanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLimitExpression(AdvancedSearchLanguageParser.LimitExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AdvancedSearchLanguageParser#filterExpression}.
+	 * Visit a parse tree produced by {@link AdvancedSearchLanguageParser#offsetExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFilterExpression(AdvancedSearchLanguageParser.FilterExpressionContext ctx);
+	T visitOffsetExpression(AdvancedSearchLanguageParser.OffsetExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AdvancedSearchLanguageParser#orderByExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOrderByExpression(AdvancedSearchLanguageParser.OrderByExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AdvancedSearchLanguageParser#sortByExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSortByExpression(AdvancedSearchLanguageParser.SortByExpressionContext ctx);
 }

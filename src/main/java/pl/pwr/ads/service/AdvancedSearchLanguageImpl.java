@@ -17,17 +17,45 @@ public class AdvancedSearchLanguageImpl extends AdvancedSearchLanguageBaseListen
 
     private final Map<String, String> expressionValues = new HashMap<>();
     private String limitClause = "";
+    private String offsetClause = "";
+    private String orderByClause = "";
+    private String sortByClause = "";
+    private int limit = 0;
+    private int offset = 0;
+    private int pageNumber;
+
+    public AdvancedSearchLanguageImpl(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
 
     private STGroup group = new STGroupFile("src/main/java/pl/pwr/ads/antlr4/SQLTemplates.stg");
 
-    public String generateSql() {
+    public Map<String,String> generateSql() {
         List<String> conditions = new ArrayList<>(expressionValues.values());
-        ST st = group.getInstanceOf("sqlTemplate");
-        st.add("conditions", conditions);
-        st.add("limitClause", limitClause);
-        String sql = st.render();
+        setPageParameter();
+
+        ST sqlTemplate = group.getInstanceOf("sqlTemplate");
+        sqlTemplate.add("conditions", conditions);
+        sqlTemplate.add("limitClause", limitClause);
+        sqlTemplate.add("offsetClause", offsetClause);
+        sqlTemplate.add("sortByClause", sortByClause);
+        sqlTemplate.add("orderByClause", orderByClause);
+        String sql = sqlTemplate.render();
+
+        ST sqlCountTemplate = group.getInstanceOf("sqlCountTemplate");
+        sqlCountTemplate.add("conditions", conditions);
+        sqlCountTemplate.add("limit",limit);
+        sqlCountTemplate.add("offset",offset);
+        String countSql = sqlCountTemplate.render();
+
         LOGGER.info("Generated SQL: {}", sql);
-        return sql;
+        return Map.of("sql", sql, "countSql", countSql);
+    }
+
+    private void setPageParameter(){
+        int diference = (limit - offset) * ( pageNumber - 1 );
+        limitClause = "LIMIT " + String.valueOf(limit);
+        offsetClause = "OFFSET " + String.valueOf(offset + diference);
     }
 
     @Override
@@ -67,8 +95,28 @@ public class AdvancedSearchLanguageImpl extends AdvancedSearchLanguageBaseListen
 
     @Override
     public void exitLimitExpression(AdvancedSearchLanguageParser.LimitExpressionContext ctx) {
-        limitClause = "LIMIT " + ctx.getChild(2).getText();
+        limit = Integer.parseInt(ctx.getChild(2).getText());
         LOGGER.debug("Set limit clause: {}", limitClause);
+    }
+
+    @Override
+    public void exitOffsetExpression(AdvancedSearchLanguageParser.OffsetExpressionContext ctx) {
+        offset = Integer.parseInt(ctx.getChild(2).getText()) ;
+    }
+
+    @Override
+    public void exitOrderByExpression(AdvancedSearchLanguageParser.OrderByExpressionContext ctx) {
+        orderByClause = ctx.getChild(2).getText();
+    }
+
+    @Override
+    public void exitSortByExpression(AdvancedSearchLanguageParser.SortByExpressionContext ctx) {
+        System.out.println("sort expression");
+        StringBuilder stringBuilderSortExpression = new StringBuilder();
+        ctx.children.stream()
+                .skip(2)
+                .forEach(stringBuilderSortExpression::append);
+        sortByClause = "ORDER BY " + stringBuilderSortExpression.toString();
     }
 
     private void processWord(String key, List<ParseTree> words, boolean isLike) {

@@ -1,10 +1,19 @@
-sqlTemplate(conditions, limitClause) ::= <<
+sqlTemplate(conditions, limitClause, offsetClause, sortByClause, orderByClause ) ::= <<
 SELECT p.id, title, description, language, created_at, updated_at,
-       a.name || ' ' || a.surname as name_surname
+       a.name || ' ' || a.surname as author
 FROM post p
 INNER JOIN post_author pa on p.id = pa.post_id
 INNER JOIN author a on pa.author_id = a.id
 <if(conditions)>WHERE <conditions; separator=" AND "><endif>
+<if(sortByClause)><sortByClause><if(orderByClause)> <orderByClause><endif><endif>
 <if(limitClause)><limitClause><endif>
+<if(offsetClause)><offsetClause><endif>
+>>
+sqlCountTemplate(conditions, limit, offset) ::= <<
+SELECT CEIL( CAST(COUNT(*) AS NUMERIC) <if(limit && offset)>/(<limit> + <offset>)<endif>)
+FROM post p
+INNER JOIN post_author pa on p.id = pa.post_id
+INNER JOIN author a on pa.author_id = a.id
+<if(conditions)>WHERE <conditions; separator=" AND "><endif>
 >>
 

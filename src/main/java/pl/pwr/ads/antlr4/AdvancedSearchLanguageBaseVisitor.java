@@ -81,5 +81,19 @@ public class AdvancedSearchLanguageBaseVisitor<T> extends AbstractParseTreeVisit
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFilterExpression(AdvancedSearchLanguageParser.FilterExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitOffsetExpression(AdvancedSearchLanguageParser.OffsetExpressionContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitOrderByExpression(AdvancedSearchLanguageParser.OrderByExpressionContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitSortByExpression(AdvancedSearchLanguageParser.SortByExpressionContext ctx) { return visitChildren(ctx); }
 }
