@@ -32,7 +32,16 @@ public class AdvancedSearchLanguageImpl extends AdvancedSearchLanguageBaseListen
 
     public Map<String,String> generateSql() {
         List<String> conditions = new ArrayList<>(expressionValues.values());
-        setPageParameter();
+
+        String countSql = "";
+        if (limit > 0 && limit > offset) {
+            setPageParameter();
+            ST sqlCountTemplate = group.getInstanceOf("sqlCountTemplate");
+            sqlCountTemplate.add("conditions", conditions);
+            sqlCountTemplate.add("limit",limit);
+            sqlCountTemplate.add("offset",offset);
+            countSql = sqlCountTemplate.render();
+        }
 
         ST sqlTemplate = group.getInstanceOf("sqlTemplate");
         sqlTemplate.add("conditions", conditions);
@@ -41,12 +50,6 @@ public class AdvancedSearchLanguageImpl extends AdvancedSearchLanguageBaseListen
         sqlTemplate.add("sortByClause", sortByClause);
         sqlTemplate.add("orderByClause", orderByClause);
         String sql = sqlTemplate.render();
-
-        ST sqlCountTemplate = group.getInstanceOf("sqlCountTemplate");
-        sqlCountTemplate.add("conditions", conditions);
-        sqlCountTemplate.add("limit",limit);
-        sqlCountTemplate.add("offset",offset);
-        String countSql = sqlCountTemplate.render();
 
         LOGGER.info("Generated SQL: {}", sql);
         return Map.of("sql", sql, "countSql", countSql);

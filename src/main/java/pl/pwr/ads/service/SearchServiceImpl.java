@@ -36,30 +36,28 @@ public class SearchServiceImpl implements SearchService {
         List<PostDTO> posts = entityManager
                 .createNativeQuery(queries.get("sql"),"PostDTOMapping").getResultList();
 
-        System.out.println(queries.get("sql"));
         System.out.println(queries.get("countSql"));
 
-        int totalCount = Integer.parseInt( entityManager
-                .createNativeQuery(queries.get("countSql")).getSingleResult().toString() );
-
-        System.out.println("Total count: " + totalCount);
+        int totalCount = 0;
+        if(!queries.get("countSql").isEmpty()) {
+            totalCount = ((Number) entityManager
+                    .createNativeQuery(queries.get("countSql")).getSingleResult()).intValue();
+            System.out.println("Total count: " + totalCount);
+        }
         return new Response(posts,totalCount);
     }
 
     private Map<String,String> generateSQL(String input, int pageNumber){
-
         CharStream cs = CharStreams.fromString(input);
         AdvancedSearchLanguageLexer lexer = new AdvancedSearchLanguageLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         AdvancedSearchLanguageParser parser = new AdvancedSearchLanguageParser(tokens);
         AdvancedSearchLanguageImpl advancedSearchLanguage = new AdvancedSearchLanguageImpl(pageNumber);
-        ParseTree tree = parser.query();
-        ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(advancedSearchLanguage, tree);
-        if(!input.isEmpty()) {
-
+        if(!input.isEmpty()){
+            ParseTree tree = parser.query();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            walker.walk(advancedSearchLanguage, tree);
         }
-
         return advancedSearchLanguage.generateSql();
     }
 }
