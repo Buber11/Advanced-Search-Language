@@ -56,7 +56,7 @@ public class AdvancedSearchLanguageImpl extends AdvancedSearchLanguageBaseListen
     }
 
     private void setPageParameter(){
-        int diference = (limit - offset) * ( pageNumber - 1 );
+        int diference = limit * (pageNumber-1);
         limitClause = "LIMIT " + String.valueOf(limit);
         offsetClause = "OFFSET " + String.valueOf(offset + diference);
     }
